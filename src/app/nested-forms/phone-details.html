@@ -1,0 +1,45 @@
+<div class="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+
+  <div class="flex items-center gap-2 mb-3">
+    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 border border-purple-300">
+      PhoneDetailsComponent
+    </span>
+    <span class="text-xs text-gray-500">grandchild — phone validation driven by UserProfileForm's checkbox</span>
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <label class="text-sm font-medium text-gray-700" for="phone">
+      Phone Number
+      @if (requireContact()) {
+        <span class="text-red-500 ml-0.5">*</span>
+        <span class="text-xs font-normal text-orange-600 ml-1">(required — UserProfileForm checkbox is checked)</span>
+      } @else {
+        <span class="text-xs font-normal text-gray-400 ml-1">(optional — check the box in UserProfileForm to make required)</span>
+      }
+    </label>
+    <input
+      id="phone"
+      type="tel"
+      [formField]="phoneForm.phone"
+      placeholder="0123456789"
+      class="border rounded-lg px-3 py-2 text-sm transition-colors"
+      [class.border-red-400]="requireContact() && phoneForm.phone().invalid() && phoneForm.phone().touched()"
+      [class.border-green-400]="requireContact() && !phoneForm.phone().invalid() && phoneForm.phone().touched()"
+      [class.border-gray-300]="!requireContact()"
+      [class.bg-white]="requireContact()"
+      [class.bg-gray-100]="!requireContact()"
+      [class.cursor-not-allowed]="!requireContact()"
+    />
+    @if (requireContact() && phoneForm.phone().invalid() && phoneForm.phone().touched()) {
+      <div class="flex flex-col gap-0.5 mt-0.5">
+        @for (error of phoneForm.phone().errors(); track error.kind) {
+          <span class="text-xs text-red-600">{{ error.message }}</span>
+        }
+      </div>
+    }
+    @if (!requireContact()) {
+      <p class="text-xs text-gray-400 mt-0.5">Field is disabled — uncheck ignores validation entirely</p>
+    }
+  </div>
+
+</div>
